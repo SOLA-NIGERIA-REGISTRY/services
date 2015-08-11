@@ -105,6 +105,9 @@ public class Rrr extends AbstractVersionedEntity {
     private List<RrrShare> rrrShareList;
     @ChildEntityList(parentIdField = "rrrId", cascadeDelete = true)
     private List<ConditionForRrr> conditionsList;
+    @ChildEntityList(parentIdField = "rrrId", cascadeDelete = true)
+    private List<RrrDetail> rrrDetailList;
+    
     @ExternalEJB(ejbLocalClass = SourceEJBLocal.class,
     loadMethod = "getSources", saveMethod = "saveSource")
     @ChildEntityList(parentIdField = "rrrId", childIdField = "sourceId",
@@ -313,6 +316,14 @@ public class Rrr extends AbstractVersionedEntity {
 
     public void setConditionsList(List<ConditionForRrr> conditionsList) {
         this.conditionsList = conditionsList;
+    }
+
+    public List<RrrDetail> getRrrDetailList() {
+        return rrrDetailList;
+    }
+
+    public void setRrrDetailList(List<RrrDetail> rrrDetailList) {
+        this.rrrDetailList = rrrDetailList;
     }
     
     @Override

@@ -99,6 +99,8 @@ public class BaUnit extends AbstractVersionedEntity {
     private String redactCode;
     @ChildEntityList(parentIdField = "baUnitId")
     private List<Rrr> rrrList;
+    @ChildEntityList(parentIdField = "baUnitId", cascadeDelete = true)
+    private List<BaUnitDetail> baUnitDetailList;
     @ChildEntityList(parentIdField = "baUnitId")
     private List<BaUnitNotation> baUnitNotationList;
     @ExternalEJB(ejbLocalClass = SourceEJBLocal.class,
@@ -232,6 +234,14 @@ public class BaUnit extends AbstractVersionedEntity {
         this.rrrList = rrrList;
     }
 
+    public List<BaUnitDetail> getBaUnitDetailList() {
+        return baUnitDetailList;
+    }
+
+    public void setBaUnitDetailList(List<BaUnitDetail> baUnitDetailList) {
+        this.baUnitDetailList = baUnitDetailList;
+    }
+    
     public List<Source> getSourceList() {
         return sourceList;
     }

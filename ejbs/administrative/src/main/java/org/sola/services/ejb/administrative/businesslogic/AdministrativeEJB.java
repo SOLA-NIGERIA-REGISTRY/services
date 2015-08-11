@@ -114,6 +114,30 @@ public class AdministrativeEJB extends AbstractEJB
     public List<ConditionType> getConditionTypes(String languageCode) {
         return getRepository().getCodeList(ConditionType.class, languageCode);
     }
+    
+    
+     /**
+     * Retrieves all administrative.BaUnitDetail_type code values.
+     *
+     * @param languageCode The language code to use for localization of display
+     * values.
+     */
+    @Override
+    public List<BaUnitDetailType> getBaUnitDetailTypes(String languageCode) {
+        return getRepository().getCodeList(BaUnitDetailType.class, languageCode);
+    }
+    
+     /**
+     * Retrieves all administrative.RrrDetail_type code values.
+     *
+     * @param languageCode The language code to use for localization of display
+     * values.
+     */
+    @Override
+    public List<RrrDetailType> getRrrDetailTypes(String languageCode) {
+        return getRepository().getCodeList(RrrDetailType.class, languageCode);
+    }
+    
 
     /**
      * Retrieves all administrative.mortgage_type code values.
