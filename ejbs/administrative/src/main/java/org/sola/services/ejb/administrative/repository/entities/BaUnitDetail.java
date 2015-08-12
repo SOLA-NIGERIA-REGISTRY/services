@@ -46,7 +46,7 @@ public class BaUnitDetail extends AbstractVersionedEntity {
     private String detailCode;
     
     @Column(name="custom_detail_text")
-    private String customConditionText;
+    private String customDetailText;
   
     @Column(name="detail_quantity")
     private int detailQuantity;
@@ -58,13 +58,39 @@ public class BaUnitDetail extends AbstractVersionedEntity {
         super();
     }
 
-    public String getCustomConditionText() {
-        return customConditionText;
+    public String getDetailCode() {
+        return detailCode;
     }
 
-    public void setCustomConditionText(String customConditionText) {
-        this.customConditionText = customConditionText;
+    public void setDetailCode(String detailCode) {
+        this.detailCode = detailCode;
     }
+
+    public String getCustomDetailText() {
+        return customDetailText;
+    }
+
+    public void setCustomDetailText(String customDetailText) {
+        this.customDetailText = customDetailText;
+    }
+
+    public int getDetailQuantity() {
+        return detailQuantity;
+    }
+
+    public void setDetailQuantity(int detailQuantity) {
+        this.detailQuantity = detailQuantity;
+    }
+
+    public String getDetailUnit() {
+        return detailUnit;
+    }
+
+    public void setDetailUnit(String detailUnit) {
+        this.detailUnit = detailUnit;
+    }
+
+  
 
     public String getId() {
         return id;
@@ -72,30 +98,6 @@ public class BaUnitDetail extends AbstractVersionedEntity {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getConditionCode() {
-        return detailCode;
-    }
-
-    public void setConditionCode(String detailCode) {
-        this.detailCode = detailCode;
-    }
-
-    public int getConditionQuantity() {
-        return detailQuantity;
-    }
-
-    public void setConditionQuantity(int detailQuantity) {
-        this.detailQuantity = detailQuantity;
-    }
-
-    public String getConditionUnit() {
-        return detailUnit;
-    }
-
-    public void setConditionUnit(String detailUnit) {
-        this.detailUnit = detailUnit;
     }
 
     public String getBaUnitId() {
