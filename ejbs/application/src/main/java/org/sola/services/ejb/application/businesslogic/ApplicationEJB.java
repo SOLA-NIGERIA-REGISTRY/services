@@ -1329,7 +1329,31 @@ public class ApplicationEJB extends AbstractEJB implements ApplicationEJBLocal {
 //        return getRepository().getEntityList(SysRegCertificates.class,
 //                SysRegCertificates.QUERY_WHERE_SEARCHBYPARTS, params);
     }
+    
+      /**
+     * Returns the list of ba_unit_id for approved systematic registration that
+     * matches the specified search string.
+     *
+     * @param searchString The search string to use
+     * @return The list of ba_unit_id for approved systematic registration
+     */
+    @Override
+    @RolesAllowed(RolesConstants.ADMINISTRATIVE_BA_UNIT_PRINT_CERT)
+    public List<SysRegCertificates> getSysRegCertificatesByCo(String searchString) {
+        HashMap params = new HashMap();
+        params.put(CommonSqlProvider.PARAM_SELECT_PART, SysRegCertificates.QUERY_SELECT);
+        params.put(CommonSqlProvider.PARAM_WHERE_PART, SysRegCertificates.QUERY_WHERE_CO);
+        params.put("search_string", searchString);
+        List<SysRegCertificates> sysRegCertificates = getRepository().getEntityList(
+                SysRegCertificates.class, params);
 
+        return sysRegCertificates;
+//        return getRepository().getEntityList(SysRegCertificates.class,
+//                SysRegCertificates.QUERY_WHERE_SEARCHBYPARTS, params);
+    }
+
+    
+    
     /**
      * Returns the list of ba_unit_id for a specific approved systematic
      * registration that matches the specified search string.
