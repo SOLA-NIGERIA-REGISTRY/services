@@ -56,7 +56,10 @@ public class SysRegCertificates extends AbstractReadOnlyEntity {
     // Where clause
 //    public static final String QUERY_WHERE_BYNR = "nr = #{" + QUERY_PARAMETER_NR  + "} "
 //            + "AND compare_strings(#{search_string}, name_lastpart)";
-    public static final String QUERY_SELECT = "  distinct(ba_unit_id), nr, name_firstpart, name_lastpart";
+    public static final String QUERY_SELECT = "  distinct(id), name_firstpart, name_lastpart, ba_unit_id, size, owners, \n" +
+"       state, surveyor, rank, imagerydate, imageryresolution, imagerysource, \n" +
+"       lga, zone, location, plan, sheetnr, commencingdate, purpose, \n" +
+"       term, rent";
 
     public static final String QUERY_WHERE_BYNR = " nr = #{" + QUERY_PARAMETER_NR + "} "
             + "AND compare_strings(#{search_string}, name_lastpart)";

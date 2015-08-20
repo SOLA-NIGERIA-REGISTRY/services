@@ -1338,7 +1338,7 @@ public class ApplicationEJB extends AbstractEJB implements ApplicationEJBLocal {
      * @return The list of ba_unit_id for approved systematic registration
      */
     @Override
-    @RolesAllowed(RolesConstants.ADMINISTRATIVE_BA_UNIT_PRINT_CERT)
+//    @RolesAllowed(RolesConstants.ADMINISTRATIVE_BA_UNIT_PRINT_CERT)
     public List<SysRegCertificates> getSysRegCertificatesByCo(String searchString) {
         HashMap params = new HashMap();
         params.put(CommonSqlProvider.PARAM_SELECT_PART, SysRegCertificates.QUERY_SELECT);
