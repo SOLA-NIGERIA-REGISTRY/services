@@ -115,9 +115,9 @@ public class SysRegCertificates extends AbstractReadOnlyEntity {
     @Column(name = "purpose")
     private String purpose;
     @Column(name = "term")
-    private Integer term;
+    private String term;
     @Column(name = "rent")
-    private Integer rent;
+    private String rent;
 
 //    public String getNr() {
 //        return nr;
@@ -127,6 +127,22 @@ public class SysRegCertificates extends AbstractReadOnlyEntity {
 //        this.nr = nr;
 //    }
 
+    public String getTerm() {
+        return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
+    }
+
+    public String getRent() {
+        return rent;
+    }
+
+    public void setRent(String rent) {
+        this.rent = rent;
+    }
+    
     public String getId() {
         return id;
     }
@@ -279,21 +295,7 @@ public class SysRegCertificates extends AbstractReadOnlyEntity {
         this.purpose = purpose;
     }
 
-    public Integer getTerm() {
-        return term;
-    }
-
-    public void setTerm(Integer term) {
-        this.term = term;
-    }
-
-    public Integer getRent() {
-        return rent;
-    }
-
-    public void setRent(Integer rent) {
-        this.rent = rent;
-    }
+    
     
     
     
