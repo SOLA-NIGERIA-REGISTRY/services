@@ -30,9 +30,12 @@ package org.sola.services.ejb.administrative.repository.entities;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.sola.services.common.repository.DefaultSorter;
 import org.sola.services.common.repository.entities.AbstractVersionedEntity;
 
 @Table(name = "ba_unit_detail", schema = "administrative")
+@DefaultSorter(sortString = "detail_code")
+
 public class BaUnitDetail extends AbstractVersionedEntity {
     
     @Id

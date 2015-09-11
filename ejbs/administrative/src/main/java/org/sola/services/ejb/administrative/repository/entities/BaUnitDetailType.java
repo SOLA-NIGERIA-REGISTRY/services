@@ -35,7 +35,7 @@ import org.sola.services.common.repository.DefaultSorter;
 import org.sola.services.common.repository.entities.AbstractCodeEntity;
 
 @Table(name = "ba_unit_detail_type", schema = "administrative")
-@DefaultSorter(sortString = "display_value")
+@DefaultSorter(sortString = "order_view")
 public class BaUnitDetailType extends AbstractCodeEntity {
 
     @Column(name = "is_for")
