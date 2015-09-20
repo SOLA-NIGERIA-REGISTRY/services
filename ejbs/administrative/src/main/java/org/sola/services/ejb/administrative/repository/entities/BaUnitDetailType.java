@@ -42,6 +42,8 @@ public class BaUnitDetailType extends AbstractCodeEntity {
     private String isFor;
     @Column(name = "field_type")
     private String fieldType;
+    @Column(name = "order_view")
+    private Integer orderView;
 
     public BaUnitDetailType() {
         super();
@@ -61,6 +63,14 @@ public class BaUnitDetailType extends AbstractCodeEntity {
 
     public void setFieldType(String fieldType) {
         this.fieldType = fieldType;
+    }
+
+    public Integer getOrderView() {
+        return orderView;
+    }
+
+    public void setOrderView(Integer orderView) {
+        this.orderView = orderView;
     }
 
 }
