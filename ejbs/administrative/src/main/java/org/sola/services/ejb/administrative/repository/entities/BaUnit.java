@@ -315,11 +315,31 @@ public class BaUnit extends AbstractVersionedEntity {
         }
         return result;
     }
-
+     
+    
+     private String generateCofONumber() {
+        String result = "";
+        SystemEJBLocal systemEJB = RepositoryUtility.tryGetEJB(SystemEJBLocal.class);
+        if (systemEJB != null) {
+            Result newNumberResult = systemEJB.checkRuleGetResultSingle("generate-cofo-nr", null);
+            if (newNumberResult != null && newNumberResult.getValue() != null) {
+                result = newNumberResult.getValue().toString();
+            }
+        }
+        return result;
+    }
+    
+    
+    
     @Override
     public void preSave() {
         if (this.isNew()) {
             setTransactionId(LocalInfo.getTransactionId());
+           for (BaUnitDetail it : getBaUnitDetailList()) {
+               if (it.getDetailCode().equalsIgnoreCase("cofonum")) {
+                   it.setCustomDetailText(generateCofONumber());
+               }
+            }  
         }
         if (getNameFirstpart() == null || getNameFirstpart().length() < 1
                 || getNameLastpart() == null || getNameLastpart().length() < 1) {
