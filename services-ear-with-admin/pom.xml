@@ -81,7 +81,7 @@
                             <contextRoot>sola/webservices</contextRoot>
                         </webModule>
                         <webModule>
-                            <groupId>org.fao.sola.admin.clients.web</groupId>
+                            <groupId>org.nga.sola.admin.clients.web</groupId>
                             <artifactId>sola-admin-clients-web</artifactId>
                             <contextRoot>sola/admin</contextRoot>
                         </webModule>
@@ -195,9 +195,9 @@
             <type>war</type>
         </dependency>
         <dependency>
-            <groupId>org.fao.sola.admin.clients.web</groupId>
+            <groupId>org.nga.sola.admin.clients.web</groupId>
             <artifactId>sola-admin-clients-web</artifactId>
-            <version>1504a</version>
+            <version>1510a</version>
             <type>war</type>
         </dependency>
         <dependency>
