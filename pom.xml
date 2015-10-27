@@ -4,12 +4,12 @@
     <parent>
         <artifactId>sola-main</artifactId>
         <groupId>org.sola</groupId>
-        <version>1510dev_b</version>
+        <version>1510devL</version>
     </parent>
     <groupId>org.sola</groupId>
     <artifactId>sola-services</artifactId>
     <packaging>pom</packaging>
-    <version>1510dev_b</version>
+    <version>1510devL</version>
     <name>Services POM</name>
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
