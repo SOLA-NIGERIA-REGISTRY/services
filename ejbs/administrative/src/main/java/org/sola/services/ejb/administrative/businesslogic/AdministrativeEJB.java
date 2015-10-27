@@ -34,6 +34,7 @@ import java.util.*;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import org.sola.common.DateUtility;
 import org.sola.common.RolesConstants;
 import org.sola.services.common.EntityAction;
 import org.sola.services.common.LocalInfo;
@@ -42,12 +43,20 @@ import org.sola.services.common.ejbs.AbstractEJB;
 import org.sola.services.common.faults.SOLAValidationException;
 import org.sola.services.common.repository.CommonSqlProvider;
 import org.sola.services.ejb.administrative.repository.entities.*;
+import org.sola.services.ejb.cadastre.businesslogic.CadastreEJBLocal;
+import org.sola.services.ejb.cadastre.repository.entities.CadastreObject;
+import org.sola.services.ejb.cadastre.repository.entities.CadastreObjectStatusChanger;
+import org.sola.services.ejb.party.repository.entities.Party;
+import org.sola.services.ejb.source.businesslogic.SourceEJBLocal;
+import org.sola.services.ejb.source.repository.entities.Source;
 import org.sola.services.ejb.system.businesslogic.SystemEJBLocal;
 import org.sola.services.ejb.system.repository.entities.BrValidation;
 import org.sola.services.ejb.transaction.businesslogic.TransactionEJBLocal;
 import org.sola.services.ejb.transaction.repository.entities.RegistrationStatusType;
 import org.sola.services.ejb.transaction.repository.entities.Transaction;
 import org.sola.services.ejb.transaction.repository.entities.TransactionBasic;
+import org.sola.services.ejb.transaction.repository.entities.TransactionStatusChanger;
+import org.sola.services.ejb.transaction.repository.entities.TransactionStatusType;
 
 /**
  * EJB to manage data in the administrative schema. Supports retrieving and
@@ -63,6 +72,8 @@ public class AdministrativeEJB extends AbstractEJB
     private SystemEJBLocal systemEJB;
     @EJB
     private TransactionEJBLocal transactionEJB;
+    @EJB
+    private CadastreEJBLocal cadastreEjb;
 
     /**
      * Sets the entity package for the EJB to
@@ -114,9 +125,8 @@ public class AdministrativeEJB extends AbstractEJB
     public List<ConditionType> getConditionTypes(String languageCode) {
         return getRepository().getCodeList(ConditionType.class, languageCode);
     }
-    
-    
-     /**
+
+    /**
      * Retrieves all administrative.BaUnitDetail_type code values.
      *
      * @param languageCode The language code to use for localization of display
@@ -126,8 +136,8 @@ public class AdministrativeEJB extends AbstractEJB
     public List<BaUnitDetailType> getBaUnitDetailTypes(String languageCode) {
         return getRepository().getCodeList(BaUnitDetailType.class, languageCode);
     }
-    
-     /**
+
+    /**
      * Retrieves all administrative.RrrDetail_type code values.
      *
      * @param languageCode The language code to use for localization of display
@@ -137,7 +147,6 @@ public class AdministrativeEJB extends AbstractEJB
     public List<RrrDetailType> getRrrDetailTypes(String languageCode) {
         return getRepository().getCodeList(RrrDetailType.class, languageCode);
     }
-    
 
     /**
      * Retrieves all administrative.mortgage_type code values.
@@ -208,7 +217,8 @@ public class AdministrativeEJB extends AbstractEJB
      * of basicPropertyUnit. Will also create a new Transaction record for the
      * BA Unit if the Service is not already associated to a Transaction.
      *
-     * <p>Requires the {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE}
+     * <p>
+     * Requires the {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE}
      * role.</p>
      *
      * @param serviceId The identifier of the Service the BA Unit is being
@@ -231,11 +241,12 @@ public class AdministrativeEJB extends AbstractEJB
     /**
      * Saves any updates to an existing BA Unit. Can also be used to create a
      * new BA Unit, however this method does not set any default values on the
-     * BA Unit like      {@linkplain #createBaUnit(java.lang.String, org.sola.services.ejb.administrative.repository.entities.BaUnit)
+     * BA Unit like null null null null null     {@linkplain #createBaUnit(java.lang.String, org.sola.services.ejb.administrative.repository.entities.BaUnit)
      * createBaUnit}. Will also create a new Transaction record for the BA Unit
      * if the Service is not already associated to a Transaction.
      *
-     * <p>Requires the {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE}
+     * <p>
+     * Requires the {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE}
      * role</p>
      *
      * @param serviceId The identifier of the Service the BA Unit is being
@@ -252,10 +263,9 @@ public class AdministrativeEJB extends AbstractEJB
         if (baUnit == null) {
             return null;
         }
-        TransactionBasic transaction =
-                transactionEJB.getTransactionByServiceId(serviceId, true, TransactionBasic.class);
+        TransactionBasic transaction
+                = transactionEJB.getTransactionByServiceId(serviceId, true, TransactionBasic.class);
         LocalInfo.setTransactionId(transaction.getId());
-
 
         return getRepository().saveEntity(baUnit);
     }
@@ -278,8 +288,10 @@ public class AdministrativeEJB extends AbstractEJB
     /**
      * Applies the appropriate approval action to every BA Unit that is
      * associated to the specified transaction. This includes updating the
-     * status of RRR and Notations associated with the BA Unit. <p>Can also be
-     * used to test the outcome of the approval using the validateOnly flag.</p>
+     * status of RRR and Notations associated with the BA Unit.
+     * <p>
+     * Can also be used to test the outcome of the approval using the
+     * validateOnly flag.</p>
      *
      * @param transactionId The Transaction identifier
      * @param approvedStatus The status to set if the validation of the BA Unit
@@ -307,8 +319,8 @@ public class AdministrativeEJB extends AbstractEJB
         params.put(CommonSqlProvider.PARAM_WHERE_PART, BaUnit.QUERY_WHERE_BYTRANSACTIONID);
         params.put(BaUnit.QUERY_PARAMETER_TRANSACTIONID, transactionId);
         params.put("username", getUserName());
-        List<BaUnitStatusChanger> baUnitList =
-                getRepository().getEntityList(BaUnitStatusChanger.class, params);
+        List<BaUnitStatusChanger> baUnitList
+                = getRepository().getEntityList(BaUnitStatusChanger.class, params);
 
         for (BaUnitStatusChanger baUnit : baUnitList) {
             validationResult.addAll(this.validateBaUnit(baUnit, languageCode));
@@ -323,8 +335,8 @@ public class AdministrativeEJB extends AbstractEJB
         params.put(CommonSqlProvider.PARAM_WHERE_PART, Rrr.QUERY_WHERE_BYTRANSACTIONID);
         params.put(Rrr.QUERY_PARAMETER_TRANSACTIONID, transactionId);
         params.put("username", getUserName());
-        List<RrrStatusChanger> rrrStatusChangerList =
-                getRepository().getEntityList(RrrStatusChanger.class, params);
+        List<RrrStatusChanger> rrrStatusChangerList
+                = getRepository().getEntityList(RrrStatusChanger.class, params);
         for (RrrStatusChanger rrr : rrrStatusChangerList) {
             validationResult.addAll(this.validateRrr(rrr, languageCode));
             if (systemEJB.validationSucceeded(validationResult) && !validateOnly) {
@@ -339,8 +351,8 @@ public class AdministrativeEJB extends AbstractEJB
             params.put("username", getUserName());
             params.put(CommonSqlProvider.PARAM_ORDER_BY_PART, BaUnitNotation.QUERY_ORDER_BY);
 
-            List<BaUnitNotationStatusChanger> baUnitNotationList =
-                    getRepository().getEntityList(BaUnitNotationStatusChanger.class, params);
+            List<BaUnitNotationStatusChanger> baUnitNotationList
+                    = getRepository().getEntityList(BaUnitNotationStatusChanger.class, params);
             for (BaUnitNotationStatusChanger baUnitNotation : baUnitNotationList) {
                 baUnitNotation.setStatusCode(RegistrationStatusType.STATUS_CURRENT);
                 getRepository().saveEntity(baUnitNotation);
@@ -418,7 +430,8 @@ public class AdministrativeEJB extends AbstractEJB
      * association. The BA Unit is not canceled / terminated until the
      * application canceling the BA Unit is approved.
      *
-     * <p>Requires the {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE}
+     * <p>
+     * Requires the {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE}
      * role.</p>
      *
      * @param baUnitId The identifier of the BA Unit to be canceled / terminated
@@ -443,7 +456,6 @@ public class AdministrativeEJB extends AbstractEJB
 
         //TODO: Put BR check to have only one pending transaction for the BaUnit and BaUnit to be with "current" status.
         //TODO: Check BR for service to have cancel action and empty Rrr field.
-
         BaUnitTarget baUnitTarget = new BaUnitTarget();
         baUnitTarget.setBaUnitId(baUnitId);
         baUnitTarget.setTransactionId(transaction.getId());
@@ -456,7 +468,8 @@ public class AdministrativeEJB extends AbstractEJB
      * Reverses the cancellation / termination of a BA Unit by removing the BA
      * Unit Target created by
      * {@linkplain #terminateBaUnit(java.lang.String, java.lang.String) terminateBaUnit}.
-     * <p>Requires the {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE}
+     * <p>
+     * Requires the {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE}
      * role.</p>
      *
      * @param baUnitId The identifier of the BA Unit to reverse the cancellation
@@ -471,7 +484,6 @@ public class AdministrativeEJB extends AbstractEJB
         }
 
         //TODO: Put BR check to have only one pending transaction for the BaUnit and BaUnit to be with "current" status.
-
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(CommonSqlProvider.PARAM_WHERE_PART, BaUnitTarget.QUERY_WHERE_GET_BY_BAUNITID);
         params.put(BaUnitTarget.PARAM_BAUNIT_ID, baUnitId);
@@ -515,8 +527,10 @@ public class AdministrativeEJB extends AbstractEJB
     }
 
     /**
-     * Creates a new BA Unit Area <p>Requires the
-     * {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE} role.</p>
+     * Creates a new BA Unit Area
+     * <p>
+     * Requires the {@linkplain RolesConstants#ADMINISTRATIVE_BA_UNIT_SAVE}
+     * role.</p>
      *
      * @param baUnitId The identifier of the area the BA Unit is being created
      * as part of
@@ -706,11 +720,10 @@ public class AdministrativeEJB extends AbstractEJB
         return result;
     }
 
-  
-
     /**
-     * Returns a list of ba units matching the supplied ids. <p> No role is
-     * required to execute this method.</p>
+     * Returns a list of ba units matching the supplied ids.
+     * <p>
+     * No role is required to execute this method.</p>
      *
      * @param baUnitIds The list of baUnit ids
      */
@@ -720,13 +733,125 @@ public class AdministrativeEJB extends AbstractEJB
     }
 
     /**
-     * Returns a summary ba unit matching the supplied id. <p> No role is
-     * required to execute this method.</p>
+     * Returns a summary ba unit matching the supplied id.
+     * <p>
+     * No role is required to execute this method.</p>
      *
      * @param baUnitId The id of the BA Unit
      */
     @Override
     public BaUnitBasic getSummaryBaUnit(String baUnitId) {
         return getRepository().getEntity(BaUnitBasic.class, baUnitId);
+    }
+
+    @Override
+    @RolesAllowed(RolesConstants.ADMIN_MANAGE_SETTINGS)
+    public boolean importBaUnit(BaUnit baUnit) {
+        if (baUnit == null) {
+            return false;
+        }
+
+        // Create transaction
+        Transaction tran = new Transaction();
+        getRepository().saveEntity(tran);
+
+        if (tran == null) {
+            throw new RuntimeException("Transaction not found");
+        }
+
+        // Save BaUnit
+        LocalInfo.setTransactionId(tran.getId());
+        baUnit.setTransactionId(tran.getId());
+        if (baUnit.getRrrList() != null) {
+            for (Rrr rrr : baUnit.getRrrList()) {
+                rrr.setTransactionId(tran.getId());
+                // Save parties first
+                if (rrr.getRrrShareList() != null) {
+                    for (RrrShare share : rrr.getRrrShareList()) {
+                        if (share.getRightHolderList() != null) {
+                            for (Party party : share.getRightHolderList()) {
+                                getRepository().saveEntity(party);
+                            }
+                        }
+                    }
+                }
+                // Save sources
+                if (rrr.getSourceList() != null) {
+                    for (Source source : rrr.getSourceList()) {
+                        getRepository().saveEntity(source);
+                    }
+                }
+                // Assign transaction ID to notation
+                if (rrr.getNotation() != null) {
+                    rrr.getNotation().setTransactionId(tran.getId());
+                }
+            }
+        }
+        
+        if (baUnit.getCadastreObjectList() != null) {
+            for (CadastreObject cadastreObject : baUnit.getCadastreObjectList()) {
+                cadastreObject.setTransactionId(tran.getId());
+            }
+        }
+
+        getRepository().saveEntity(baUnit);
+
+        // Set approved status to cadastre objects
+        List<ValidationResult> validationResult = new ArrayList<ValidationResult>();
+        cadastreEjb.ChangeStatusOfCadastreObjects(
+                tran.getId(),
+                CadastreObjectStatusChanger.QUERY_WHERE_SEARCHBYTRANSACTION_PENDING,
+                RegistrationStatusType.STATUS_CURRENT);
+
+        // Set approved status to BaUnit
+        BaUnitStatusChanger baUnitStatusChanger = getRepository()
+                .getEntity(BaUnitStatusChanger.class, baUnit.getId());
+
+        //validationResult.addAll(this.validateBaUnit(baUnitStatusChanger, "en-US"));
+        //if (systemEJB.validationSucceeded(validationResult)) {
+        baUnitStatusChanger.setStatusCode(RegistrationStatusType.STATUS_CURRENT);
+        baUnitStatusChanger.setTransactionId(tran.getId());
+        getRepository().saveEntity(baUnitStatusChanger);
+        //} 
+        
+        // Set approved status for RRRs
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put(CommonSqlProvider.PARAM_WHERE_PART, Rrr.QUERY_WHERE_BYTRANSACTIONID);
+        params.put(Rrr.QUERY_PARAMETER_TRANSACTIONID, tran.getId());
+        params.put("username", getUserName());
+        List<RrrStatusChanger> rrrStatusChangerList
+                = getRepository().getEntityList(RrrStatusChanger.class, params);
+        for (RrrStatusChanger rrr : rrrStatusChangerList) {
+            //validationResult.addAll(this.validateRrr(rrr, "en-US"));
+            //if (systemEJB.validationSucceeded(validationResult)) {
+            rrr.setStatusCode(RegistrationStatusType.STATUS_CURRENT);
+            getRepository().saveEntity(rrr);
+            //}
+        }
+
+        // Approve noations
+        params = new HashMap<String, Object>();
+        params.put(CommonSqlProvider.PARAM_WHERE_PART, BaUnitNotation.QUERY_WHERE_BYTRANSACTIONID);
+        params.put(BaUnitNotation.QUERY_PARAMETER_TRANSACTIONID, tran.getId());
+        params.put("username", getUserName());
+
+        List<BaUnitNotationStatusChanger> baUnitNotationList
+                = getRepository().getEntityList(BaUnitNotationStatusChanger.class, params);
+        for (BaUnitNotationStatusChanger baUnitNotation : baUnitNotationList) {
+            baUnitNotation.setStatusCode(RegistrationStatusType.STATUS_CURRENT);
+            getRepository().saveEntity(baUnitNotation);
+        }
+
+        // Approve transaction
+        TransactionStatusChanger tranStatusChanger = getRepository().getEntity(TransactionStatusChanger.class, tran.getId());
+        tranStatusChanger.setStatusCode(TransactionStatusType.APPROVED);
+        tranStatusChanger.setApprovalDatetime(DateUtility.now());
+        getRepository().saveEntity(tranStatusChanger);
+
+        if (!systemEJB.validationSucceeded(validationResult)) {
+            throw new SOLAValidationException(validationResult);
+        }
+
+        return true;
     }
 }

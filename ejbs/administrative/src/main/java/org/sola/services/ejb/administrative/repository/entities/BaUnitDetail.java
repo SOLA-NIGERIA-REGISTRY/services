@@ -99,6 +99,7 @@ public class BaUnitDetail extends AbstractVersionedEntity {
   
 
     public String getId() {
+        id = id == null ? generateId() : id;
         return id;
     }
 

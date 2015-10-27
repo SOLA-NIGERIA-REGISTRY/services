@@ -34,6 +34,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.sola.common.StringUtility;
 import org.sola.services.common.LocalInfo;
 import org.sola.services.common.repository.*;
 import org.sola.services.common.repository.entities.AbstractReadOnlyEntity;
@@ -348,6 +349,16 @@ public class BaUnit extends AbstractVersionedEntity {
                 String[] numberParts = baUnitNumber.split("/");
                 setNameFirstpart(numberParts[0]);
                 setNameLastpart(numberParts[1]);
+            }
+        }
+        // Assign cadastre object name first/last parts if they are empty
+        if(getCadastreObjectList() != null){
+            for(CadastreObject co : getCadastreObjectList()){
+                if(StringUtility.isEmpty(co.getNameFirstpart())){
+                    co.setNameFirstpart(getNameFirstpart());
+                    co.setNameLastpart(getNameLastpart());
+                    break;
+                }
             }
         }
         super.preSave();

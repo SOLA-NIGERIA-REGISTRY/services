@@ -205,4 +205,11 @@ public interface AdministrativeEJBLocal extends AbstractSolaTransactionEJBLocal 
      * AdministrativeEJB.getSummaryBaUnit}.
      */
     BaUnitBasic getSummaryBaUnit(String baUnitId);
+    
+    /**
+     * Imports prepared BaUnit as an approved record in the registry
+     * @param baUnit BaUnit object to import
+     * @return 
+     */
+    boolean importBaUnit(BaUnit baUnit);
 }
