@@ -337,7 +337,7 @@ public class BaUnit extends AbstractVersionedEntity {
         if (this.isNew()) {
             setTransactionId(LocalInfo.getTransactionId());
            for (BaUnitDetail it : getBaUnitDetailList()) {
-               if (it.getDetailCode().equalsIgnoreCase("cofonum")) {
+               if (it.getDetailCode().equalsIgnoreCase("cOfO")) {
                    it.setCustomDetailText(generateCofONumber());
                }
             }  
