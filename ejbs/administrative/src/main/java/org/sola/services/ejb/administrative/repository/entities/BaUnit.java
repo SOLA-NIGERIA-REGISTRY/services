@@ -29,7 +29,9 @@
  */
 package org.sola.services.ejb.administrative.repository.entities;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -318,12 +320,23 @@ public class BaUnit extends AbstractVersionedEntity {
     }
      
     
-     private String generateCofONumber() {
+     private String generateCofONumber( ) {
         String result = "";
+        HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
+       
         SystemEJBLocal systemEJB = RepositoryUtility.tryGetEJB(SystemEJBLocal.class);
+         for (BaUnitDetail it : getBaUnitDetailList()) {
+              if (it.getDetailCode().equalsIgnoreCase("zone")) {
+                parameters.put("zone", it.getCustomDetailText());
+              } 
+              if (it.getDetailCode().equalsIgnoreCase("estate")) {
+                  parameters.put("estate", it.getCustomDetailText());
+              } 
+          }     
         if (systemEJB != null) {
-            Result newNumberResult = systemEJB.checkRuleGetResultSingle("generate-cofo-nr", null);
-            if (newNumberResult != null && newNumberResult.getValue() != null) {
+//            Result newNumberResult = systemEJB.checkRuleGetResultSingle("generate-cofo-nr", null);
+            Result newNumberResult = systemEJB.checkRuleGetResultSingle("generate-cofo-nr", parameters);
+           if (newNumberResult != null && newNumberResult.getValue() != null) {
                 result = newNumberResult.getValue().toString();
             }
         }
@@ -337,9 +350,9 @@ public class BaUnit extends AbstractVersionedEntity {
         if (this.isNew()) {
             setTransactionId(LocalInfo.getTransactionId());
            for (BaUnitDetail it : getBaUnitDetailList()) {
-               if (it.getDetailCode().equalsIgnoreCase("cOfO")) {
+              if (it.getDetailCode().equalsIgnoreCase("cOfO")) {
                    it.setCustomDetailText(generateCofONumber());
-               }
+              }  
             }  
         }
         if (getNameFirstpart() == null || getNameFirstpart().length() < 1
