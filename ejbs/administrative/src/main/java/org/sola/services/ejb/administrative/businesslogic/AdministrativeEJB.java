@@ -776,6 +776,12 @@ public class AdministrativeEJB extends AbstractEJB
                     }
                 }
                 // Save sources
+                if (baUnit.getSourceList() != null) {
+                    for (Source source : baUnit.getSourceList()) {
+                        getRepository().saveEntity(source);
+                    }
+                }
+                
                 if (rrr.getSourceList() != null) {
                     for (Source source : rrr.getSourceList()) {
                         getRepository().saveEntity(source);
