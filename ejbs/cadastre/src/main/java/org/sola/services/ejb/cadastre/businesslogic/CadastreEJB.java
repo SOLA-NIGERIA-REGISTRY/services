@@ -67,6 +67,14 @@ public class CadastreEJB extends AbstractEJB implements CadastreEJBLocal {
     public List<LandUseType> getLandUseTypes(String languageCode) {
         return getRepository().getCodeList(LandUseType.class, languageCode);
     }
+     @Override
+    public List<LgaType> getLgaTypes(String languageCode) {
+        return getRepository().getCodeList(LgaType.class, languageCode);
+    }
+     @Override
+    public List<ZoneType> getZoneTypes(String languageCode) {
+        return getRepository().getCodeList(ZoneType.class, languageCode);
+    }
 
     /**
      * Retrieves all cadastre.cadastre_object_type code values.

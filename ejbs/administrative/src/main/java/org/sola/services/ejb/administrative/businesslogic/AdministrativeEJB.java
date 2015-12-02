@@ -124,8 +124,33 @@ public class AdministrativeEJB extends AbstractEJB
     @Override
     public List<ConditionType> getConditionTypes(String languageCode) {
         return getRepository().getCodeList(ConditionType.class, languageCode);
+//        Map<String, Object> params = new HashMap<String, Object>();
+//        params.put(CommonSqlProvider.PARAM_WHERE_PART, ConditionType.QUERY_WHERE_FOR);
+//        params.put(ConditionType.QUERY_PARAMETER_FOR, "cofo");
+//        params.put(CommonSqlProvider.PARAM_QUERY, ConditionType.QUERY_GETQUERY);
+//
+//        return getRepository().executeFunction(params, ConditionType.class);
     }
+    
+    
+     /**
+     * Retrieves all administrative.condition_type code values.
+     *
+     * @param languageCode The language code to use for localization of display
+     * values.
+     */
+    @Override
+    public List<ConditionType> getConditionTypesFor(String isFor, String languageCode) {
+        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(CommonSqlProvider.PARAM_WHERE_PART, ConditionType.QUERY_WHERE_FOR);
+        params.put(ConditionType.QUERY_PARAMETER_FOR, "cofo");
+        params.put(CommonSqlProvider.PARAM_QUERY, ConditionType.QUERY_GETQUERY);
 
+        return getRepository().executeFunction(params, ConditionType.class);
+//        return getRepository().getEntityList(ConditionType.class, params);
+      }
+    
     /**
      * Retrieves all administrative.BaUnitDetail_type code values.
      *
@@ -157,6 +182,11 @@ public class AdministrativeEJB extends AbstractEJB
     @Override
     public List<MortgageType> getMortgageTypes(String languageCode) {
         return getRepository().getCodeList(MortgageType.class, languageCode);
+    }
+    
+    @Override
+    public List<RotType> getRotTypes(String languageCode) {
+        return getRepository().getCodeList(RotType.class, languageCode);
     }
 
     /**
@@ -565,6 +595,15 @@ public class AdministrativeEJB extends AbstractEJB
         params.put(BaUnit.QUERY_PARAMETER_LASTPART, nameLastPart);
         params.put(BaUnit.QUERY_PARAMETER_COLIST, colist);
         return getRepository().getEntity(BaUnit.class, params);
+    }
+    
+    
+    @Override
+    public List <BaUnit> getBaUnitsByCadObject(String colist) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(CommonSqlProvider.PARAM_WHERE_PART, BaUnit.QUERY_WHERE_BYCO);  
+        params.put(BaUnit.QUERY_PARAMETER_COLIST, colist);
+        return getRepository().getEntityList(BaUnit.class, params);
     }
 
     /**

@@ -25,36 +25,22 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
-package org.sola.services.ejb.administrative.repository.entities;
+package org.sola.services.ejb.cadastre.repository.entities;
 
-import javax.persistence.Column;
 import javax.persistence.Table;
 import org.sola.services.common.repository.DefaultSorter;
 import org.sola.services.common.repository.entities.AbstractCodeEntity;
 
-@Table(name = "condition_type", schema = "administrative")
-@DefaultSorter(sortString="display_value")
-public class ConditionType extends AbstractCodeEntity {
-public static final String QUERY_PARAMETER_FOR = "isFor";
-public static final String QUERY_WHERE_FOR
-            = "is_for = #{" + QUERY_PARAMETER_FOR + "}";
-public static final String QUERY_GETQUERY = "select * from administrative.condition_type where is_for = #{" + QUERY_PARAMETER_FOR + "}";
-            
-            
-    @Column(name = "is_for")
-    private String isFor;
-    
-    public ConditionType(){
+/**
+ * Entity representing cadastre.cadastre_object_type code table.
+ *
+ * @author soladev
+ */
+@Table(name = "zone_type", schema = "cadastre")
+@DefaultSorter(sortString = "display_value")
+public class ZoneType extends AbstractCodeEntity {
+
+    public ZoneType() {
         super();
     }
-
-    public String getIsFor() {
-        return isFor;
-    }
-
-    public void setIsFor(String isFor) {
-        this.isFor = isFor;
-    }
-    
-    
 }

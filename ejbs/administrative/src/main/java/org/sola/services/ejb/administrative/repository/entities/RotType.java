@@ -25,36 +25,25 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package org.sola.services.ejb.administrative.repository.entities;
 
-import javax.persistence.Column;
 import javax.persistence.Table;
 import org.sola.services.common.repository.DefaultSorter;
 import org.sola.services.common.repository.entities.AbstractCodeEntity;
 
-@Table(name = "condition_type", schema = "administrative")
+/**
+ * Entity representing the administrative.mortgage_type code table.
+ * @author soladev
+ */
+@Table(name = "rrr_occupancy_type", schema = "administrative")
 @DefaultSorter(sortString="display_value")
-public class ConditionType extends AbstractCodeEntity {
-public static final String QUERY_PARAMETER_FOR = "isFor";
-public static final String QUERY_WHERE_FOR
-            = "is_for = #{" + QUERY_PARAMETER_FOR + "}";
-public static final String QUERY_GETQUERY = "select * from administrative.condition_type where is_for = #{" + QUERY_PARAMETER_FOR + "}";
-            
-            
-    @Column(name = "is_for")
-    private String isFor;
-    
-    public ConditionType(){
+public class RotType extends AbstractCodeEntity {
+
+    public RotType() {
         super();
     }
-
-    public String getIsFor() {
-        return isFor;
-    }
-
-    public void setIsFor(String isFor) {
-        this.isFor = isFor;
-    }
-    
-    
 }

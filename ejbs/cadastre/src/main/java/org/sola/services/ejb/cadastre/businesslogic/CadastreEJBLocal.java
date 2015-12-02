@@ -43,6 +43,16 @@ public interface CadastreEJBLocal extends AbstractEJBLocal {
      * CadastreEJB.getCadastreObjectTypes}.
      */
     List<LandUseType> getLandUseTypes(String languageCode);
+     /**
+     * See {@linkplain CadastreEJB#getLandUseTypes(java.lang.String)
+     * CadastreEJB.getCadastreObjectTypes}.
+     */
+    List<LgaType> getLgaTypes(String languageCode);
+     /**
+     * See {@linkplain CadastreEJB#getLandUseTypes(java.lang.String)
+     * CadastreEJB.getCadastreObjectTypes}.
+     */
+    List<ZoneType> getZoneTypes(String languageCode);
 
     /**
      * See {@linkplain CadastreEJB#getCadastreObjectTypes(java.lang.String)

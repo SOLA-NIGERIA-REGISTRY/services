@@ -60,6 +60,14 @@ public interface AdministrativeEJBLocal extends AbstractSolaTransactionEJBLocal 
      */
     List<ConditionType> getConditionTypes(String languageCode);
     
+    
+    /**
+     * see {@linkplain AdministrativeEJB#getConditionTypes(java.lang.String)
+     * AdministrativeEJB.getConditionTypes}
+     */
+    List<ConditionType> getConditionTypesFor(String isFor, String languageCode);
+    
+    
     /**
      * see {@linkplain AdministrativeEJB#getBaUnitDetailTypes(java.lang.String)
      * AdministrativeEJB.getBaUnitDetailTypes}
@@ -78,6 +86,9 @@ public interface AdministrativeEJBLocal extends AbstractSolaTransactionEJBLocal 
      * AdministrativeEJB.getMortgageTypes}
      */
     List<MortgageType> getMortgageTypes(String languageCode);
+     
+    
+    List<RotType> getRotTypes(String languageCode);
 
     /**
      * see {@linkplain AdministrativeEJB#getRRRGroupTypes(java.lang.String)
@@ -165,7 +176,8 @@ public interface AdministrativeEJBLocal extends AbstractSolaTransactionEJBLocal 
      * AdministrativeEJB.getBaUnitWithCadObject}
      */
     BaUnit getBaUnitWithCadObject(String nameFirstPart, String nameLastPart, String colist);
-
+    
+    List <BaUnit> getBaUnitsByCadObject(String colist);
     /**
      * See {@linkplain AdministrativeEJB#SysRegPubDisParcelName(java.lang.String)
      * CadastreEJB.SysRegPubDisParcelName}.

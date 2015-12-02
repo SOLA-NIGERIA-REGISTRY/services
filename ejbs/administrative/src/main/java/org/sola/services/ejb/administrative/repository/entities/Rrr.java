@@ -1,28 +1,30 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2014 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 /*
@@ -31,8 +33,10 @@
  */
 package org.sola.services.ejb.administrative.repository.entities;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -41,6 +45,8 @@ import org.sola.services.common.LocalInfo;
 import org.sola.services.common.repository.*;
 import org.sola.services.common.repository.entities.AbstractReadOnlyEntity;
 import org.sola.services.common.repository.entities.AbstractVersionedEntity;
+import org.sola.services.ejb.administrative.businesslogic.AdministrativeEJBLocal;
+import org.sola.services.ejb.cadastre.businesslogic.CadastreEJBLocal;
 import org.sola.services.ejb.party.businesslogic.PartyEJBLocal;
 import org.sola.services.ejb.party.repository.entities.Party;
 import org.sola.services.ejb.source.businesslogic.SourceEJBLocal;
@@ -52,11 +58,12 @@ import org.sola.services.ejb.transaction.repository.entities.Transaction;
 import org.sola.services.ejb.transaction.repository.entities.TransactionStatusType;
 
 /**
- * Entity representing administrative.rrr table. 
+ * Entity representing administrative.rrr table.
+ *
  * @author soladev
  */
 @Table(name = "rrr", schema = "administrative")
-@DefaultSorter(sortString="status_code, nr")
+@DefaultSorter(sortString = "status_code, nr")
 public class Rrr extends AbstractVersionedEntity {
 
     public static final String QUERY_PARAMETER_TRANSACTIONID = "transactionId";
@@ -86,7 +93,7 @@ public class Rrr extends AbstractVersionedEntity {
     private Double share;
     @Column(name = "amount")
     private BigDecimal amount;
-    @Column(name="due_date")
+    @Column(name = "due_date")
     private Date dueDate;
     @Column(name = "mortgage_interest_rate")
     private BigDecimal mortgageInterestRate;
@@ -107,19 +114,95 @@ public class Rrr extends AbstractVersionedEntity {
     private List<ConditionForRrr> conditionsList;
 //    @ChildEntityList(parentIdField = "rrrId", cascadeDelete = true)
 //    private List<RrrDetail> rrrDetailList;
-    
+    @Column(name = "date_commenced")
+    private Date dateCommenced;
+    @Column(name = "date_signed")
+    private Date dateSigned;
+    @Column(name = "cofo")
+    private String cOfO;
+    @Column(name = "term")
+    private Integer term;
+    @Column(name = "advance_payment")
+    private BigDecimal advancePayment;
+    @Column(name = "yearly_rent")
+    private BigDecimal yearlyRent;
+    @Column(name = "review_period")
+    private Integer reviewPeriod;
+    @Column(name = "zone_code")
+    private String zoneCode;
+    @Column(name = "rot_code")
+    private String rotCode;
+    @Column(name = "instrument_registration_no")
+    private String instrRegNum;
+
     @ExternalEJB(ejbLocalClass = SourceEJBLocal.class,
-    loadMethod = "getSources", saveMethod = "saveSource")
+            loadMethod = "getSources", saveMethod = "saveSource")
     @ChildEntityList(parentIdField = "rrrId", childIdField = "sourceId",
-    manyToManyClass = SourceDescribesRrr.class)
+            manyToManyClass = SourceDescribesRrr.class)
     private List<Source> sourceList;
     @ExternalEJB(ejbLocalClass = PartyEJBLocal.class, loadMethod = "getParties")
     @ChildEntityList(parentIdField = "rrrId", childIdField = "partyId",
-    manyToManyClass = PartyForRrr.class, readOnly = true)
+            manyToManyClass = PartyForRrr.class, readOnly = true)
     private List<Party> rightHolderList;
-    @Column(insertable=false, updatable=false, name = "concatenated_name")
+    @Column(insertable = false, updatable = false, name = "concatenated_name")
     @AccessFunctions(onSelect = "administrative.get_concatenated_name(ba_unit_id)")
     private String concatenatedName;
+
+    public Date getDateCommenced() {
+        return dateCommenced;
+    }
+
+    public void setDateCommenced(Date dateCommenced) {
+        this.dateCommenced = dateCommenced;
+    }
+
+    public Date getDateSigned() {
+        return dateSigned;
+    }
+
+    public void setDateSigned(Date dateSigned) {
+        this.dateSigned = dateSigned;
+    }
+
+    public String getCOfO() {
+        return cOfO;
+    }
+
+    public void setCOfO(String cOfO) {
+        this.cOfO = cOfO;
+    }
+
+    public Integer getTerm() {
+        return term;
+    }
+
+    public void setTerm(Integer term) {
+        this.term = term;
+    }
+
+    public BigDecimal getAdvancePayment() {
+        return advancePayment;
+    }
+
+    public void setAdvancePayment(BigDecimal advancePayment) {
+        this.advancePayment = advancePayment;
+    }
+
+    public BigDecimal getYearlyRent() {
+        return yearlyRent;
+    }
+
+    public void setYearlyRent(BigDecimal yearlyRent) {
+        this.yearlyRent = yearlyRent;
+    }
+
+    public Integer getReviewPeriod() {
+        return reviewPeriod;
+    }
+
+    public void setReviewPeriod(Integer reviewPeriod) {
+        this.reviewPeriod = reviewPeriod;
+    }
 
     public String getConcatenatedName() {
         return concatenatedName;
@@ -128,7 +211,7 @@ public class Rrr extends AbstractVersionedEntity {
     public void setConcatenatedName(String concatenatedName) {
         this.concatenatedName = concatenatedName;
     }
-    
+
     // Other fields
     private Boolean locked = null;
 
@@ -221,7 +304,23 @@ public class Rrr extends AbstractVersionedEntity {
     public void setMortgageTypeCode(String mortgageTypeCode) {
         this.mortgageTypeCode = mortgageTypeCode;
     }
+    
+    public String getZoneCode() {
+        return zoneCode;
+    }
 
+    public void setZoneCode(String zoneCode) {
+        this.zoneCode = zoneCode;
+    }
+    
+    public String getRotCode() {
+        return rotCode;
+    }
+
+    public void setRotCode(String rotCode) {
+        this.rotCode = rotCode;
+    }
+    
     public String getNr() {
         return nr;
     }
@@ -318,14 +417,6 @@ public class Rrr extends AbstractVersionedEntity {
         this.conditionsList = conditionsList;
     }
 
-//    public List<RrrDetail> getRrrDetailList() {
-//        return rrrDetailList;
-//    }
-//
-//    public void setRrrDetailList(List<RrrDetail> rrrDetailList) {
-//        this.rrrDetailList = rrrDetailList;
-//    }
-    
     @Override
     public String getClassificationCode() {
         return classificationCode;
@@ -344,6 +435,16 @@ public class Rrr extends AbstractVersionedEntity {
         this.redactCode = redactCode;
     }
 
+    public String getInstrRegNum() {
+        return instrRegNum;
+    }
+
+    public void setInstrRegNum(String instrRegNum) {
+        this.instrRegNum = instrRegNum;
+    }
+    
+    
+    
     public Boolean isLocked() {
         if (locked == null) {
             locked = false;
@@ -356,15 +457,42 @@ public class Rrr extends AbstractVersionedEntity {
         return locked;
     }
 
+    private String generateCofONumber() {
+        String result = "";
+        HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
+
+        SystemEJBLocal systemEJB = RepositoryUtility.tryGetEJB(SystemEJBLocal.class);
+
+        String zone = getZoneCode();
+        String estate = getRotCode();
+        if (zone!= null) {
+        parameters.put("zone", zone+"/");
+        }
+        if (estate!= null) {
+        parameters.put("estate", estate+"/");
+        }
+       
+        if (systemEJB != null) {
+            Result newNumberResult = systemEJB.checkRuleGetResultSingle("generate-cofo-nr", parameters);
+            if (newNumberResult != null && newNumberResult.getValue() != null) {
+                result = newNumberResult.getValue().toString();
+            }
+        }
+        return result;
+    }
+
     @Override
     public void preSave() {
-        if (this.isNew()) {
-            setTransactionId(LocalInfo.getTransactionId());
-        }
+//        if (this.isNew()) {
+//            
+//            setCOfO(generateCofONumber());
+//        }
 
         if (isNew() && getNr() == null) {
-            // Assign a generated number to the Rrr if it is not currently set. 
+        setTransactionId(LocalInfo.getTransactionId());
+// Assign a generated number to the Rrr if it is not currently set. 
             setNr(generateRrrNumber());
+            setCOfO(generateCofONumber());
         }
         super.preSave();
     }

@@ -78,6 +78,9 @@ public class BaUnit extends AbstractVersionedEntity {
     public static final String QUERY_WHERE_BYPROPERTYCODE
             = "name_firstpart = #{" + QUERY_PARAMETER_FIRSTPART + "} AND "
             + "name_lastpart = #{" + QUERY_PARAMETER_LASTPART + "}";
+    public static final String QUERY_WHERE_BYCO
+            = " id in (select ba_unit_id from administrative.ba_unit_contains_spatial_unit\n"
+            + " where spatial_unit_id in ( #{" + QUERY_PARAMETER_COLIST + "}))";
     public static final String QUERY_WHERE_BYBAUNITID
             = "id = #{" + QUERY_PARAMETER_ID + "}";
 
@@ -102,8 +105,8 @@ public class BaUnit extends AbstractVersionedEntity {
     private String redactCode;
     @ChildEntityList(parentIdField = "baUnitId")
     private List<Rrr> rrrList;
-    @ChildEntityList(parentIdField = "baUnitId", cascadeDelete = true)
-    private List<BaUnitDetail> baUnitDetailList;
+//    @ChildEntityList(parentIdField = "baUnitId", cascadeDelete = true)
+//    private List<BaUnitDetail> baUnitDetailList;
     @ChildEntityList(parentIdField = "baUnitId")
     private List<BaUnitNotation> baUnitNotationList;
     @ExternalEJB(ejbLocalClass = SourceEJBLocal.class,
@@ -237,14 +240,13 @@ public class BaUnit extends AbstractVersionedEntity {
         this.rrrList = rrrList;
     }
 
-    public List<BaUnitDetail> getBaUnitDetailList() {
-        return baUnitDetailList;
-    }
-
-    public void setBaUnitDetailList(List<BaUnitDetail> baUnitDetailList) {
-        this.baUnitDetailList = baUnitDetailList;
-    }
-    
+//    public List<BaUnitDetail> getBaUnitDetailList() {
+//        return baUnitDetailList;
+//    }
+//
+//    public void setBaUnitDetailList(List<BaUnitDetail> baUnitDetailList) {
+//        this.baUnitDetailList = baUnitDetailList;
+//    }
     public List<Source> getSourceList() {
         return sourceList;
     }
@@ -276,7 +278,7 @@ public class BaUnit extends AbstractVersionedEntity {
     public void setPendingActionCode(String pendingActionCode) {
         this.pendingActionCode = pendingActionCode;
     }
-    
+
     @Override
     public String getClassificationCode() {
         return classificationCode;
@@ -294,7 +296,7 @@ public class BaUnit extends AbstractVersionedEntity {
     public void setRedactCode(String redactCode) {
         this.redactCode = redactCode;
     }
-    
+
     public Boolean isLocked() {
         if (locked == null) {
             locked = false;
@@ -318,42 +320,38 @@ public class BaUnit extends AbstractVersionedEntity {
         }
         return result;
     }
-     
-    
-     private String generateCofONumber( ) {
-        String result = "";
-        HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
-       
-        SystemEJBLocal systemEJB = RepositoryUtility.tryGetEJB(SystemEJBLocal.class);
-         for (BaUnitDetail it : getBaUnitDetailList()) {
-              if (it.getDetailCode().equalsIgnoreCase("zone")) {
-                parameters.put("zone", it.getCustomDetailText());
-              } 
-              if (it.getDetailCode().equalsIgnoreCase("estate")) {
-                  parameters.put("estate", it.getCustomDetailText());
-              } 
-          }     
-        if (systemEJB != null) {
-//            Result newNumberResult = systemEJB.checkRuleGetResultSingle("generate-cofo-nr", null);
-            Result newNumberResult = systemEJB.checkRuleGetResultSingle("generate-cofo-nr", parameters);
-           if (newNumberResult != null && newNumberResult.getValue() != null) {
-                result = newNumberResult.getValue().toString();
-            }
-        }
-        return result;
-    }
-    
-    
-    
+
+//     private String generateCofONumber( ) {
+//        String result = "";
+//        HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
+//       
+//        SystemEJBLocal systemEJB = RepositoryUtility.tryGetEJB(SystemEJBLocal.class);
+//         for (BaUnitDetail it : getBaUnitDetailList()) {
+//              if (it.getDetailCode().equalsIgnoreCase("zone")) {
+//                parameters.put("zone", it.getCustomDetailText());
+//              } 
+//              if (it.getDetailCode().equalsIgnoreCase("estate")) {
+//                  parameters.put("estate", it.getCustomDetailText());
+//              } 
+//          }     
+//        if (systemEJB != null) {
+////            Result newNumberResult = systemEJB.checkRuleGetResultSingle("generate-cofo-nr", null);
+//            Result newNumberResult = systemEJB.checkRuleGetResultSingle("generate-cofo-nr", parameters);
+//           if (newNumberResult != null && newNumberResult.getValue() != null) {
+//                result = newNumberResult.getValue().toString();
+//            }
+//        }
+//        return result;
+//    }
     @Override
     public void preSave() {
         if (this.isNew()) {
             setTransactionId(LocalInfo.getTransactionId());
-           for (BaUnitDetail it : getBaUnitDetailList()) {
-              if (it.getDetailCode().equalsIgnoreCase("cOfO")) {
-                   it.setCustomDetailText(generateCofONumber());
-              }  
-            }  
+//           for (BaUnitDetail it : getBaUnitDetailList()) {
+//              if (it.getDetailCode().equalsIgnoreCase("cOfO")) {
+//                   it.setCustomDetailText(generateCofONumber());
+//              }  
+//            }  
         }
         if (getNameFirstpart() == null || getNameFirstpart().length() < 1
                 || getNameLastpart() == null || getNameLastpart().length() < 1) {
@@ -365,9 +363,9 @@ public class BaUnit extends AbstractVersionedEntity {
             }
         }
         // Assign cadastre object name first/last parts if they are empty
-        if(getCadastreObjectList() != null){
-            for(CadastreObject co : getCadastreObjectList()){
-                if(StringUtility.isEmpty(co.getNameFirstpart())){
+        if (getCadastreObjectList() != null) {
+            for (CadastreObject co : getCadastreObjectList()) {
+                if (StringUtility.isEmpty(co.getNameFirstpart())) {
                     co.setNameFirstpart(getNameFirstpart());
                     co.setNameLastpart(getNameLastpart());
                     break;
