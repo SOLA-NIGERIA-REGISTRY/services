@@ -330,7 +330,9 @@ public class TransactionEJB extends AbstractEJB implements TransactionEJBLocal {
     @Override
     public <T extends TransactionBasic> List<ValidationResult> saveTransaction(
             T transaction, String requestType, String languageCode) {
-
+          
+        
+        
         //Saves the transaction
         transaction = this.saveEntity(transaction);
 

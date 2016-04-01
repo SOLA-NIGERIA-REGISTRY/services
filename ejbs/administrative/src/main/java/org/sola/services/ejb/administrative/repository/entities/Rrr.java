@@ -488,10 +488,16 @@ public class Rrr extends AbstractVersionedEntity {
 //            setCOfO(generateCofONumber());
 //        }
 
-        if (isNew() && getNr() == null) {
+        if (isNew()) {
         setTransactionId(LocalInfo.getTransactionId());
 // Assign a generated number to the Rrr if it is not currently set. 
             setNr(generateRrrNumber());
+        }
+        
+        if (getNr() == null) {
+//        if (isNew() && getNr() == null) {
+            setTransactionId(LocalInfo.getTransactionId());
+// Assign a generated number to the CofO if it is not currently set. 
             setCOfO(generateCofONumber());
         }
         super.preSave();

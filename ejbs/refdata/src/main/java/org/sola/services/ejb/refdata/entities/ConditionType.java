@@ -34,6 +34,16 @@ import org.sola.services.common.repository.entities.AbstractCodeEntity;
 @Table(name = "condition_type", schema = "administrative")
 @DefaultSorter(sortString="display_value")
 public class ConditionType extends AbstractCodeEntity {
+    private String isFor;
+
+    public String getIsFor() {
+        return isFor;
+    }
+
+    public void setIsFor(String isFor) {
+        this.isFor = isFor;
+    }
+    
     public ConditionType(){
         super();
     }
