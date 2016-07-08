@@ -899,4 +899,19 @@ public class AdministrativeEJB extends AbstractEJB
 
         return true;
     }
+    
+    @Override
+    public LeaseConditionTemplate getLeaseConditionTemplate(String id) {
+        return getRepository().getEntity(LeaseConditionTemplate.class, id);
+    }
+
+    @Override
+    public List<LeaseConditionTemplateBasic> getLeaseConditionTemplates() {
+        return getRepository().getEntityList(LeaseConditionTemplateBasic.class);
+    }
+
+    @Override
+    public LeaseConditionTemplate saveLeaseConditionTemplate(LeaseConditionTemplate template) {
+        return getRepository().saveEntity(template);
+    }
 }

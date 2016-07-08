@@ -224,4 +224,24 @@ public interface AdministrativeEJBLocal extends AbstractSolaTransactionEJBLocal 
      * @return 
      */
     boolean importBaUnit(BaUnit baUnit);
+    
+    /** 
+     * Returns lease conditions template by ID 
+     * @param id Lease conditions template
+     * @return 
+     */
+    LeaseConditionTemplate getLeaseConditionTemplate(String id);
+    
+    /** 
+     * Returns list of lease condition templates
+     * @return 
+     */
+    List<LeaseConditionTemplateBasic> getLeaseConditionTemplates();
+    
+    /** 
+     * Saves lease condition template and returns it back
+     * @param template Lease conditions template
+     * @return 
+     */
+    LeaseConditionTemplate saveLeaseConditionTemplate(LeaseConditionTemplate template);
 }
