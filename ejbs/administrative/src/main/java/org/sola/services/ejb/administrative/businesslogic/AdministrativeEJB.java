@@ -906,11 +906,7 @@ public class AdministrativeEJB extends AbstractEJB
     }
 
     @Override
-    public List<LeaseConditionTemplateBasic> getLeaseConditionTemplates() {
-        return getRepository().getEntityList(LeaseConditionTemplateBasic.class);
-    }
-
-    @Override
+    @RolesAllowed(RolesConstants.ADMIN_MANAGE_REFDATA)
     public LeaseConditionTemplate saveLeaseConditionTemplate(LeaseConditionTemplate template) {
         return getRepository().saveEntity(template);
     }

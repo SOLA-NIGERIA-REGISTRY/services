@@ -925,4 +925,17 @@ public class SearchEJB extends AbstractEJB implements SearchEJBLocal {
         params.put("geom", wkbGeom);
         return getRepository().getScalar(byte[].class, params);
     }
+    
+    @Override
+    public List<LeaseConditionTemplateSearchResults> getLeaseConditionTemplates(String lang, String rrrType) {
+        if(lang == null)
+            lang = "en-us";
+        if(rrrType == null)
+            rrrType = "";
+        Map params = new HashMap<String, Object>();
+        params.put(CommonSqlProvider.PARAM_QUERY, LeaseConditionTemplateSearchResults.SELECT_QUERY);
+        params.put(LeaseConditionTemplateSearchResults.PARAM_LANG, lang);
+        params.put(LeaseConditionTemplateSearchResults.PARAM_RRR_TYPE, rrrType);
+        return getRepository().getEntityList(LeaseConditionTemplateSearchResults.class, params);
+    }
 }

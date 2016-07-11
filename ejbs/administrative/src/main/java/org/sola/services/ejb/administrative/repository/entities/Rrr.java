@@ -45,8 +45,6 @@ import org.sola.services.common.LocalInfo;
 import org.sola.services.common.repository.*;
 import org.sola.services.common.repository.entities.AbstractReadOnlyEntity;
 import org.sola.services.common.repository.entities.AbstractVersionedEntity;
-import org.sola.services.ejb.administrative.businesslogic.AdministrativeEJBLocal;
-import org.sola.services.ejb.cadastre.businesslogic.CadastreEJBLocal;
 import org.sola.services.ejb.party.businesslogic.PartyEJBLocal;
 import org.sola.services.ejb.party.repository.entities.Party;
 import org.sola.services.ejb.source.businesslogic.SourceEJBLocal;
@@ -110,10 +108,6 @@ public class Rrr extends AbstractVersionedEntity {
     private BaUnitNotation notation;
     @ChildEntityList(parentIdField = "rrrId", cascadeDelete = true)
     private List<RrrShare> rrrShareList;
-    @ChildEntityList(parentIdField = "rrrId", cascadeDelete = true)
-    private List<ConditionForRrr> conditionsList;
-//    @ChildEntityList(parentIdField = "rrrId", cascadeDelete = true)
-//    private List<RrrDetail> rrrDetailList;
     @Column(name = "date_commenced")
     private Date dateCommenced;
     @Column(name = "date_signed")
@@ -134,6 +128,8 @@ public class Rrr extends AbstractVersionedEntity {
     private String rotCode;
     @Column(name = "instrument_registration_no")
     private String instrRegNum;
+    @Column(name="lease_conditions")
+    private String leaseConditions;
 
     @ExternalEJB(ejbLocalClass = SourceEJBLocal.class,
             loadMethod = "getSources", saveMethod = "saveSource")
@@ -409,14 +405,6 @@ public class Rrr extends AbstractVersionedEntity {
         this.rightHolderList = rightHolderList;
     }
 
-    public List<ConditionForRrr> getConditionsList() {
-        return conditionsList;
-    }
-
-    public void setConditionsList(List<ConditionForRrr> conditionsList) {
-        this.conditionsList = conditionsList;
-    }
-
     @Override
     public String getClassificationCode() {
         return classificationCode;
@@ -442,8 +430,14 @@ public class Rrr extends AbstractVersionedEntity {
     public void setInstrRegNum(String instrRegNum) {
         this.instrRegNum = instrRegNum;
     }
-    
-    
+
+    public String getLeaseConditions() {
+        return leaseConditions;
+    }
+
+    public void setLeaseConditions(String leaseConditions) {
+        this.leaseConditions = leaseConditions;
+    }
     
     public Boolean isLocked() {
         if (locked == null) {
