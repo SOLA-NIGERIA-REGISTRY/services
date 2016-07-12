@@ -114,7 +114,13 @@ public class AdministrativeEJB extends AbstractEJB
     public List<BaUnitType> getBaUnitTypes(String languageCode) {
         return getRepository().getCodeList(BaUnitType.class, languageCode);
     }
-
+    
+    
+    @Override
+    public List<CofoType> getCofoTypes(String languageCode) {
+        return getRepository().getCodeList(CofoType.class, languageCode);
+    }
+    
     /**
      * Retrieves all administrative.condition_type code values.
      *

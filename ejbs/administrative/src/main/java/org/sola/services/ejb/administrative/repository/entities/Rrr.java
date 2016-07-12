@@ -77,6 +77,8 @@ public class Rrr extends AbstractVersionedEntity {
     private String nr;
     @Column(name = "type_code")
     private String typeCode;
+    @Column(name = "cofo_type")
+    private String cofoType;
     @Column(name = "status_code", insertable = false, updatable = false)
     private String statusCode;
     @Column(name = "is_primary")
@@ -438,6 +440,15 @@ public class Rrr extends AbstractVersionedEntity {
     public void setLeaseConditions(String leaseConditions) {
         this.leaseConditions = leaseConditions;
     }
+
+    public String getCofoType() {
+        return cofoType;
+    }
+
+    public void setCofoType(String cofoType) {
+        this.cofoType = cofoType;
+    }
+    
     
     public Boolean isLocked() {
         if (locked == null) {

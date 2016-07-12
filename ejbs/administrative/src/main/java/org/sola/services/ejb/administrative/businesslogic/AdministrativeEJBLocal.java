@@ -53,7 +53,11 @@ public interface AdministrativeEJBLocal extends AbstractSolaTransactionEJBLocal 
      * AdministrativeEJB.getBaUnitTypes}
      */
     List<BaUnitType> getBaUnitTypes(String languageCode);
+    
+    
+    List<CofoType> getCofoTypes(String languageCode);
 
+    
     /**
      * see {@linkplain AdministrativeEJB#getConditionTypes(java.lang.String)
      * AdministrativeEJB.getConditionTypes}
