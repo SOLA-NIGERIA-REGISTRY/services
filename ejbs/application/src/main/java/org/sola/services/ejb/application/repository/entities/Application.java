@@ -121,7 +121,8 @@ public class Application extends AbstractVersionedEntity {
     @ChildEntityList(parentIdField = "applicationId", childIdField = "sourceId",
     manyToManyClass = ApplicationUsesSource.class)
     private List<Source> sourceList;
-    @ExternalEJB(ejbLocalClass = CadastreEJBLocal.class, loadMethod = "getCadastreObjects")
+    @ExternalEJB(ejbLocalClass = CadastreEJBLocal.class, 
+    loadMethod = "getCadastreObjects")
     @ChildEntityList(parentIdField = "applicationId", childIdField = "spatialUnitId",
     manyToManyClass = ApplicationSpatialUnit.class)
     private List<CadastreObject> cadastreObjectList;
