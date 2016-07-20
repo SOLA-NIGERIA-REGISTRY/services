@@ -4,12 +4,12 @@
     <parent>
     <artifactId>sola-ejbs</artifactId>
     <groupId>org.sola.services</groupId>
-    <version>1607d</version>
+    <version>1607e</version>
   </parent>
 
     <groupId>org.sola.services.ejbs</groupId>
     <artifactId>sola-refdata</artifactId>
-    <version>1607d</version>
+    <version>1607e</version>
     <packaging>ejb</packaging>
 
     <name>EJB ReferenceData</name>
