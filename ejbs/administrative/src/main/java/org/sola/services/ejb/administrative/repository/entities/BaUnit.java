@@ -130,7 +130,18 @@ public class BaUnit extends AbstractVersionedEntity {
     @Column(insertable = false, updatable = false, name = "calculated_area_size")
     @AccessFunctions(onSelect = "administrative.get_calculated_area_size_action(#{" + QUERY_PARAMETER_COLIST + "})")
     private BigDecimal calculatedAreaSize;
+    @Column(name = "address_for_notice")
+    private String addressNotice;
 
+    public String getAddressNotice() {
+        return addressNotice;
+    }
+
+    public void setAddressNotice(String addressNotice) {
+        this.addressNotice = addressNotice;
+    }
+    
+    
     public BigDecimal getCalculatedAreaSize() {
         return calculatedAreaSize;
     }

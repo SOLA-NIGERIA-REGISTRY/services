@@ -4,13 +4,13 @@
     <parent>
         <artifactId>sola-ejbs</artifactId>
         <groupId>org.sola.services</groupId>
-        <version>1607f</version>
+        <version>1607g</version>
     </parent>
     
     <groupId>org.sola.services.ejbs</groupId>
     <artifactId>sola-admin</artifactId>
     <packaging>ejb</packaging>
-    <version>1607f</version>
+    <version>1607g</version>
     
     <name>EJB Admin</name>
     
